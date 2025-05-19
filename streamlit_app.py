@@ -19,18 +19,7 @@ Carregue arquivos ZIP contendo DBFs para iniciar a análise.
 # Upload de arquivos
 uploaded_files = st.sidebar.file_uploader("Carregue arquivos ZIP com dados DBF", type="zip", accept_multiple_files=True)
 
-# Lista completa de municípios
-municipios_completos = [
-    'ALECRIM', 'ALEGRIA', 'BOA VISTA DO BURICA', 'CAMPINA DAS MISSOES',
-    'CANDIDO GODOI', 'DOUTOR MAURICIO CARDOSO', 'GIRUA', 'HORIZONTINA',
-    'INDEPENDENCIA', 'NOVA CANDELARIA', 'NOVO MACHADO', 'PORTO LUCENA',
-    'PORTO MAUA', 'PORTO VERA CRUZ', 'SANTA ROSA', 'SANTO CRISTO',
-    'SAO JOSE DO INHACORA', 'SAO PAULO DAS MISSOES', 'SENADOR SALGADO FILHO',
-    'TRES DE MAIO', 'TUCUNDUVA', 'TUPARENDI'
-]
 
-# Criar DataFrame base com todos os municípios
-df_base = pd.DataFrame({'Município': municipios_completos})
 
 if uploaded_files:
     # Processamento dos arquivos
@@ -197,6 +186,19 @@ if uploaded_files:
         # 6. Resetar índice e formatar
         tabela_virus = tabela_virus.reset_index()
         tabela_virus = tabela_virus.rename(columns={'municipio de residencia': 'Município'})
+
+        # Lista completa de municípios
+        municipios_completos = [
+            'ALECRIM', 'ALEGRIA', 'BOA VISTA DO BURICA', 'CAMPINA DAS MISSOES',
+            'CANDIDO GODOI', 'DOUTOR MAURICIO CARDOSO', 'GIRUA', 'HORIZONTINA',
+            'INDEPENDENCIA', 'NOVA CANDELARIA', 'NOVO MACHADO', 'PORTO LUCENA',
+            'PORTO MAUA', 'PORTO VERA CRUZ', 'SANTA ROSA', 'SANTO CRISTO',
+            'SAO JOSE DO INHACORA', 'SAO PAULO DAS MISSOES', 'SENADOR SALGADO FILHO',
+            'TRES DE MAIO', 'TUCUNDUVA', 'TUPARENDI'
+        ]
+        
+        # Criar DataFrame base com todos os municípios
+        df_base = pd.DataFrame({'Município': municipios_completos})
 
         # Fazer merge para incluir todos os municípios
         tabela_completa = pd.merge(df_base, tabela_virus, on='Município', how='left')
