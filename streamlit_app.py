@@ -212,6 +212,7 @@ if uploaded_files:
     with tab2:
         st.header("Total de casos por município")
         st.dataframe(tabela_virus)
+        st.header("Total de óbitos por município")
         st.dataframe(obitos)
         
         # Gráfico de barras
