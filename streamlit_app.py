@@ -362,7 +362,7 @@ if uploaded_files:
                 'fillOpacity': 0
             },
             tooltip=folium.features.GeoJsonTooltip(
-                fields=['NOME'],
+                fields=['NOME', 'TOTAL_VIRUS'],
                 aliases=['Município: '],
                 localize=True
             )
