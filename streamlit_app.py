@@ -352,7 +352,7 @@ if uploaded_files:
         ).add_to(m)
         
         # Primeiro, crie um dicionário com os totais por município
-        totais_por_municipio = dict(zip(tabela_completa['Município'], tabela_completa['Total_virus']))
+        totais_por_municipio = dict(zip(tabela_completa['Município'], tabela_completa['TOTAL_VIRUS']))
         
         # Modifique o GeoJson para incluir o tooltip com os casos
         folium.GeoJson(
