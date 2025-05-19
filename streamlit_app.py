@@ -19,6 +19,19 @@ Carregue arquivos ZIP contendo DBFs para iniciar a análise.
 # Upload de arquivos
 uploaded_files = st.sidebar.file_uploader("Carregue arquivos ZIP com dados DBF", type="zip", accept_multiple_files=True)
 
+# Lista completa de municípios
+municipios_completos = [
+    'ALECRIM', 'ALEGRIA', 'BOA VISTA DO BURICA', 'CAMPINA DAS MISSOES',
+    'CANDIDO GODOI', 'DOUTOR MAURICIO CARDOSO', 'GIRUA', 'HORIZONTINA',
+    'INDEPENDENCIA', 'NOVA CANDELARIA', 'NOVO MACHADO', 'PORTO LUCENA',
+    'PORTO MAUA', 'PORTO VERA CRUZ', 'SANTA ROSA', 'SANTO CRISTO',
+    'SAO JOSE DO INHACORA', 'SAO PAULO DAS MISSOES', 'SENADOR SALGADO FILHO',
+    'TRES DE MAIO', 'TUCUNDUVA', 'TUPARENDI'
+]
+
+# Criar DataFrame base com todos os municípios
+df_base = pd.DataFrame({'Município': municipios_completos})
+
 if uploaded_files:
     # Processamento dos arquivos
     with st.spinner('Processando arquivos...'):
@@ -185,6 +198,16 @@ if uploaded_files:
         tabela_virus = tabela_virus.reset_index()
         tabela_virus = tabela_virus.rename(columns={'municipio de residencia': 'Município'})
 
+        # Fazer merge para incluir todos os municípios
+        tabela_completa = pd.merge(df_base, tabela_virus, on='Município', how='left')
+        
+        # Preencher NA com 0 para as colunas numéricas
+        colunas_numericas = tabela_completa.columns.difference(['Município'])
+        tabela_completa[colunas_numericas] = tabela_completa[colunas_numericas].fillna(0).astype(int)
+        
+        # Ordenar por município
+        tabela_completa = tabela_completa.sort_values('Município')
+
         # Obitos
         obitos = pd.pivot_table(dados_consolidados2[dados_consolidados2['Evolução']=='Óbito'], index=['municipio de residencia'], columns = ['Classificação final'], aggfunc='size').fillna(0)
 
@@ -239,7 +262,7 @@ if uploaded_files:
         
         # Aplicar estilo
         styled_df = (
-            tabela_virus.set_index('Município').style
+            tabela_completa.set_index('Município').style
             .applymap(color_cells, subset=pd.IndexSlice[:, tabela_virus.columns[1:]])
             .format("{:.0f}", na_rep="-")
             .set_properties(**{'text-align': 'center'})
