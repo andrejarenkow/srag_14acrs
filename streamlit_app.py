@@ -351,20 +351,31 @@ if uploaded_files:
             reset=True
         ).add_to(m)
         
-        # Adicionar tooltips interativos
+        popup_html = """
+            <h4>{}</h4>
+            Casos totais: {}<br>
+            <small>Fonte: Seus dados</small>
+        """
+        
         folium.GeoJson(
             geojson_data,
-            name='Labels',
-            style_function=lambda feature: {
-                'fillColor': '#ffff00',
-                'color': 'black',
-                'weight': 0.3,
-                'fillOpacity': 0
-            },
-            tooltip=folium.features.GeoJsonTooltip(
+            popup=folium.features.GeoJsonPopup(
                 fields=['NOME'],
-                aliases=['Município: '],
-                localize=True
+                aliases=[""],
+                localize=True,
+                labels=False,
+                style="font-weight: bold;",
+                formatter="""
+                    function(feature) {
+                        var nome = feature.properties.NOME;
+                        var casos = %s[nome] || 0;
+                        return `<div style="width: 200px">
+                            <h4>${nome}</h4>
+                            Total de casos: <b>${casos}</b><br/>
+                            <small>Clique para mais detalhes</small>
+                        </div>`;
+                    }
+                """ % totais_por_municipio
             )
         ).add_to(m)
         
