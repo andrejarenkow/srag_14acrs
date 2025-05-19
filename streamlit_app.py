@@ -355,33 +355,28 @@ if uploaded_files:
         totais_por_municipio = dict(zip(tabela_completa['Município'], tabela_completa['TOTAL_VIRUS']))
         
         # Modifique o GeoJson para incluir o tooltip com os casos
+        # Tooltip aprimorado
         folium.GeoJson(
             geojson_data,
-            name='Labels',
+            name='Tooltip Interativo',
             style_function=lambda feature: {
-                'fillColor': '#ffff00',
+                'fillOpacity': 0,  # Transparente (só queremos o tooltip)
                 'color': 'black',
-                'weight': 0.3,
-                'fillOpacity': 0
+                'weight': 0.5
             },
             tooltip=folium.features.GeoJsonTooltip(
-                fields=['NOME'],  # Campo do GeoJSON com o nome do município
-                aliases=['Município: '],
+                fields=['NOME'],
+                aliases=[''],
                 localize=True,
-                labels=True,
-                style=("""
-                    background-color: #F0EFEF;
-                    border: 1px solid black;
-                    border-radius: 3px;
-                    box-shadow: 3px;
-                    padding: 5px;
-                """),
-                # Adiciona dinamicamente o número de casos
+                style=("font-weight: bold; padding: 5px;"),
                 formatter="""
                     function(feature) {
                         var nome = feature.properties.NOME;
                         var casos = %s[nome] || 0;
-                        return `Município: ${nome}<br>Casos: ${casos}`;
+                        return `<div style="width: 150px">
+                            <b>${nome}</b><br/>
+                            Total de casos: <b>${casos}</b>
+                        </div>`;
                     }
                 """ % totais_por_municipio
             )
