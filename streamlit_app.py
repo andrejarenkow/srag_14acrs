@@ -167,7 +167,7 @@ if uploaded_files:
         with col1:
             municipio = st.selectbox(
                 'Município',
-                options=['Todos'] + sorted(dados_consolidados2['municipio de residencia'].unique().tolist())
+                options=['Todos'] + sorted(dados_consolidados2['municipio de residencia'].unique().tolist()))
             
             classificacao = st.selectbox(
                 'Classificação Final',
