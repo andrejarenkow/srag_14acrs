@@ -170,14 +170,14 @@ if uploaded_files:
         tabela_virus = df.groupby('municipio de residencia')[cols_contagem].sum()
         
         # 4. Adicionar totais
-        tabela_virus['TOTAL_INFLUENZA'] = tabela_virus['INFLUENZA_A'] + tabela_virus['INFLUENZA_B']
+        #tabela_virus['TOTAL_INFLUENZA'] = tabela_virus['INFLUENZA_A'] + tabela_virus['INFLUENZA_B']
         tabela_virus['TOTAL_VIRUS'] = tabela_virus.sum(axis=1)
         
         # 5. Reordenar colunas
         ordem_colunas = ['COVID', 
                         'INFLUENZA_A', 'INFLUENZA_A_H1N1', 'INFLUENZA_A_H3N2',
                         'INFLUENZA_B', 'INFLUENZA_B_VICTORIA', 'INFLUENZA_B_YAMAGATA',
-                        'TOTAL_INFLUENZA'] + virus_cols + ['TOTAL_VIRUS']
+                        ] + virus_cols + ['TOTAL_VIRUS']
         
         tabela_virus = tabela_virus[ordem_colunas]
         
