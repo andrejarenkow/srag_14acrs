@@ -2,3 +2,4 @@ streamlit
 dbfread
 pandas
 folium
+streamlit_folium 
