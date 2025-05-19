@@ -250,7 +250,7 @@ if uploaded_files:
         )
         
         # Mostrar tabela
-        st.dataframe(styled_df, use_container_width=True)
+        st.dataframe(styled_df, use_container_width=True, height = 300)
         
         # Legenda de cores
         #st.markdown("""
