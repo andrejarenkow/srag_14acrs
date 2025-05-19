@@ -253,14 +253,14 @@ if uploaded_files:
         st.dataframe(styled_df, use_container_width=True)
         
         # Legenda de cores
-        st.markdown("""
-        **Legenda:**
-        - <span style='background-color:#F5F5F5; padding: 2px 5px; border-radius: 3px;'>0 casos</span>
-        - <span style='background-color:#FFF3CD; padding: 2px 5px; border-radius: 3px;'>1-3 casos</span>
-        - <span style='background-color:#FFE082; padding: 2px 5px; border-radius: 3px;'>4-6 casos</span>
-        - <span style='background-color:#FFA000; padding: 2px 5px; border-radius: 3px;'>7-9 casos</span>
-        - <span style='background-color:#D32F2F; color:white; padding: 2px 5px; border-radius: 3px;'>10+ casos</span>
-        """, unsafe_allow_html=True)
+        #st.markdown("""
+        #**Legenda:**
+        #- <span style='background-color:#F5F5F5; padding: 2px 5px; border-radius: 3px;'>0 casos</span>
+        #- <span style='background-color:#FFF3CD; padding: 2px 5px; border-radius: 3px;'>1-3 casos</span>
+        #- <span style='background-color:#FFE082; padding: 2px 5px; border-radius: 3px;'>4-6 casos</span>
+        #- <span style='background-color:#FFA000; padding: 2px 5px; border-radius: 3px;'>7-9 casos</span>
+        #- <span style='background-color:#D32F2F; color:white; padding: 2px 5px; border-radius: 3px;'>10+ casos</span>
+        #""", unsafe_allow_html=True)
                
 
         st.header("Total de óbitos por município")
