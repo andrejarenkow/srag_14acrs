@@ -228,7 +228,7 @@ if uploaded_files:
             return f'background-color: {color}; color: black;'
         
         # Título
-        st.title('Distribuição de Vírus por Município')
+        #st.title('Distribuição de Vírus por Município')
         st.markdown("""
         <style>
             .stDataFrame div[data-testid="stDataFrameContainer"] {
