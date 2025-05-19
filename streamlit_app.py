@@ -158,7 +158,7 @@ if uploaded_files:
         st.dataframe(consolidado_virus)
         
         # Gráfico de barras
-        st.bar_chart(consolidado_virus, stack=False, x_label='Município de residência', y_label='Casos', horizontal = True)
+        st.bar_chart(consolidado_virus, stack=False)
     
     with tab3:
         st.header("Dados detalhados de todos os casos")
