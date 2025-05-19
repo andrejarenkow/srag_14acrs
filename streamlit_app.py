@@ -376,7 +376,7 @@ if uploaded_files:
         st.markdown('Mapa de calor dos casos totais por município')
         
         # Ajustar o tamanho do mapa
-        coluna_mapa, coluna_legenda = st.columns(2)
+        coluna_mapa, coluna_legenda = st.columns([2,1])
         with coluna_mapa:
             st_folium(m, width=725, height=500)
         
