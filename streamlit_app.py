@@ -239,7 +239,7 @@ if uploaded_files:
         
         # Aplicar estilo
         styled_df = (
-            tabela_virus.style
+            tabela_virus.set_index('Município').style
             .applymap(color_cells, subset=pd.IndexSlice[:, tabela_virus.columns[1:]])
             .format("{:.0f}", na_rep="-")
             .set_properties(**{'text-align': 'center'})
