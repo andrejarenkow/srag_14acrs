@@ -365,7 +365,7 @@ if uploaded_files:
         # 6. Configurar o popup (opcional)
         popup = folium.GeoJsonPopup(
             fields=['NOME', 'casos'],
-            aliases=['Município: ', 'Total de casos: '],
+            aliases=['Município: ', 'Total de vírus: '],
             localize=True,
             labels=True,
             style="background-color: white; font-weight: bold;",
