@@ -1,4 +1,3 @@
 streamlit
-
 dbfread
-zipfile
+pandas
