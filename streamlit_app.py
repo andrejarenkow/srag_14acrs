@@ -332,55 +332,63 @@ if uploaded_files:
         # Padronizar nomes nos dados
         tabela_completa['Município'] = tabela_completa['Município'].str.upper().map(mapeamento_nomes).fillna(tabela_completa['Município'])
         
-        # Criar o mapa
-        m = folium.Map(location=[-27.7, -54.5], zoom_start=9)  # Ajuste as coordenadas para sua região
-        
-        # Adicionar o choropleth
-        folium.Choropleth(
-            geo_data=geojson_data,
-            name='Casos de SRAG',
-            data=tabela_completa,
-            columns=['Município', 'TOTAL_VIRUS'],
-            key_on='feature.properties.NOME',
-            fill_color='YlOrRd',
-            fill_opacity=0.7,
-            line_opacity=0.2,
-            legend_name='Total de Casos de SRAG',
-            highlight=True,
-            bins=[0, 1, 5, 10, 20, 50, 100],  # Ajuste os intervalos conforme necessário
-            reset=True
-        ).add_to(m)
-        
-        # Primeiro, crie um dicionário com os totais por município
+        # 2. Criar dicionário de casos por município
         totais_por_municipio = dict(zip(tabela_completa['Município'], tabela_completa['TOTAL_VIRUS']))
         
-        # Modifique o GeoJson para incluir o tooltip com os casos
-        # Tooltip aprimorado
+        # 3. Adicionar os dados ao GeoJSON
+        for feature in geojson_data['features']:
+            nome_municipio = feature['properties']['NOME']
+            feature['properties']['casos'] = totais_por_municipio.get(nome_municipio, 0)
+        
+        # 4. Configurar o mapa
+        m = folium.Map(location=[-27.8, -54.5], zoom_start=9)
+        
+        # 5. Configurar o tooltip
+        tooltip = folium.GeoJsonTooltip(
+            fields=['NOME', 'casos'],
+            aliases=['Município: ', 'Casos totais: '],
+            localize=True,
+            sticky=True,
+            labels=True,
+            style="""
+                background-color: #F0EFEF;
+                border: 1px solid black;
+                border-radius: 3px;
+                box-shadow: 3px;
+                padding: 5px;
+                font-family: Arial;
+                font-size: 12px;
+            """,
+            max_width=200
+        )
+        
+        # 6. Configurar o popup (opcional)
+        popup = folium.GeoJsonPopup(
+            fields=['NOME', 'casos'],
+            aliases=['Município: ', 'Total de casos: '],
+            localize=True,
+            labels=True,
+            style="background-color: white; font-weight: bold;",
+        )
+        
+        # 7. Adicionar a camada GeoJson ao mapa
         folium.GeoJson(
             geojson_data,
-            name='Tooltip Interativo',
+            name='Casos de SRAG',
             style_function=lambda feature: {
-                'fillOpacity': 0,  # Transparente (só queremos o tooltip)
+                'fillColor': '#ffeda0' if feature['properties']['casos'] == 0 else
+                            '#feb24c' if feature['properties']['casos'] <= 5 else
+                            '#fc4e2a' if feature['properties']['casos'] <= 20 else
+                            '#b10026',
                 'color': 'black',
-                'weight': 0.5
+                'weight': 0.5,
+                'fillOpacity': 0.7
             },
-            tooltip=folium.features.GeoJsonTooltip(
-                fields=['NOME'],
-                aliases=[''],
-                localize=True,
-                style=("font-weight: bold; padding: 5px;"),
-                formatter="""
-                    function(feature) {
-                        var nome = feature.properties.NOME;
-                        var casos = %s[nome] || 0;
-                        return `<div style="width: 150px">
-                            <b>${nome}</b><br/>
-                            Total de casos: <b>${casos}</b>
-                        </div>`;
-                    }
-                """ % totais_por_municipio
-            )
+            tooltip=tooltip,
+            popup=popup,
+            highlight_function=lambda x: {'weight': 2, 'color': 'black'}
         ).add_to(m)
+
         
         # Adicionar controle de camadas
         folium.LayerControl().add_to(m)
