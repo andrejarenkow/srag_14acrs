@@ -132,7 +132,7 @@ if uploaded_files:
 
         # Consolidado por vírus por município
         # Supondo que df seja seu DataFrame original
-        df = consolidados2.copy()
+        df = dados_consolidados2.copy()
 
         # 1. Identificar colunas disponíveis
         colunas_base = ['municipio de residencia', 'Classificação final', 'Tipo Influenza', 
