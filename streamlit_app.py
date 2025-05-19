@@ -372,7 +372,7 @@ if uploaded_files:
         folium.LayerControl().add_to(m)
         
         # Mostrar o mapa no Streamlit
-        st.title('Distribuição Geográfica de Casos de SRAG - CRS 14')
+        st.header('Distribuição Geográfica de Casos de SRAG - CRS 14')
         st.markdown('Mapa de calor dos casos totais por município')
         
         # Ajustar o tamanho do mapa
