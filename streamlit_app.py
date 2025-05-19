@@ -261,16 +261,7 @@ if uploaded_files:
         - <span style='background-color:#FFA000; padding: 2px 5px; border-radius: 3px;'>7-9 casos</span>
         - <span style='background-color:#D32F2F; color:white; padding: 2px 5px; border-radius: 3px;'>10+ casos</span>
         """, unsafe_allow_html=True)
-        
-        # Adicionar filtros
-        with st.expander("Filtros Avançados"):
-            min_cases = st.slider('Casos mínimos para destacar', 0, 10, 3)
-            selected_viruses = st.multiselect(
-                'Selecione os vírus para visualizar',
-                options=tabela_virus.columns[1:],
-                default=tabela_virus.columns[1:].tolist()
-            )
-        
+               
 
         st.header("Total de óbitos por município")
         st.dataframe(obitos)
