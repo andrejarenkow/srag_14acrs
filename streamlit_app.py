@@ -298,6 +298,98 @@ if uploaded_files:
         # Gráfico de barras
         #st.bar_chart(tabela_virus, stack=False)
     
+    with tab4:
+        # Carregar o GeoJSON
+        with open('municipios_14.geojson', 'r', encoding='utf-8') as f:
+            geojson_data = json.load(f)
+        
+        # Criar um dicionário de mapeamento de nomes de municípios para padronização
+        mapeamento_nomes = {
+            'ALECRIM': 'Alecrim',
+            'ALEGRIA': 'Alegria',
+            'BOA VISTA DO BURICA': 'Boa Vista do Buricá',
+            'CAMPINA DAS MISSOES': 'Campina das Missões',
+            'CANDIDO GODOI': 'Cândido Godói',
+            'DOUTOR MAURICIO CARDOSO': 'Doutor Maurício Cardoso',
+            'GIRUA': 'Giruá',
+            'HORIZONTINA': 'Horizontina',
+            'INDEPENDENCIA': 'Independência',
+            'NOVA CANDELARIA': 'Nova Candelária',
+            'NOVO MACHADO': 'Novo Machado',
+            'PORTO LUCENA': 'Porto Lucena',
+            'PORTO MAUA': 'Porto Mauá',
+            'PORTO VERA CRUZ': 'Porto Vera Cruz',
+            'SANTA ROSA': 'Santa Rosa',
+            'SANTO CRISTO': 'Santo Cristo',
+            'SAO JOSE DO INHACORA': 'São José do Inhacorá',
+            'SAO PAULO DAS MISSOES': 'São Paulo das Missões',
+            'SENADOR SALGADO FILHO': 'Senador Salgado Filho',
+            'TRES DE MAIO': 'Três de Maio',
+            'TUCUNDUVA': 'Tucunduva',
+            'TUPARENDI': 'Tuparendi'
+        }
+        
+        # Padronizar nomes nos dados
+        tabela_completa['Município'] = tabela_completa['Município'].str.upper().map(mapeamento_nomes).fillna(tabela_completa['Município'])
+        
+        # Criar o mapa
+        m = folium.Map(location=[-27.5, -54.5], zoom_start=9)  # Ajuste as coordenadas para sua região
+        
+        # Adicionar o choropleth
+        folium.Choropleth(
+            geo_data=geojson_data,
+            name='Casos de SRAG',
+            data=tabela_completa,
+            columns=['Município', 'Total_virus'],
+            key_on='feature.properties.NOME',
+            fill_color='YlOrRd',
+            fill_opacity=0.7,
+            line_opacity=0.2,
+            legend_name='Total de Casos de SRAG',
+            highlight=True,
+            bins=[0, 1, 5, 10, 20, 50, 100],  # Ajuste os intervalos conforme necessário
+            reset=True
+        ).add_to(m)
+        
+        # Adicionar tooltips interativos
+        folium.GeoJson(
+            geojson_data,
+            name='Labels',
+            style_function=lambda feature: {
+                'fillColor': '#ffff00',
+                'color': 'black',
+                'weight': 0.3,
+                'fillOpacity': 0
+            },
+            tooltip=folium.features.GeoJsonTooltip(
+                fields=['NOME'],
+                aliases=['Município: '],
+                localize=True
+            )
+        ).add_to(m)
+        
+        # Adicionar controle de camadas
+        folium.LayerControl().add_to(m)
+        
+        # Mostrar o mapa no Streamlit
+        st.title('Distribuição Geográfica de Casos de SRAG - CRS 14')
+        st.markdown('Mapa de calor dos casos totais por município')
+        
+        # Ajustar o tamanho do mapa
+        st_folium(m, width=725, height=500)
+        
+        # Adicionar legenda explicativa
+        st.markdown("""
+        **Legenda do Mapa:**
+        - <span style='color:#ffffcc;'>▉</span> 0 casos
+        - <span style='color:#ffeda0;'>▉</span> 1-5 casos
+        - <span style='color:#fed976;'>▉</span> 6-10 casos
+        - <span style='color:#feb24c;'>▉</span> 11-20 casos
+        - <span style='color:#fd8d3c;'>▉</span> 21-50 casos
+        - <span style='color:#fc4e2a;'>▉</span> 51-100 casos
+        - <span style='color:#b10026;'>▉</span> 100+ casos
+        """, unsafe_allow_html=True)
+    
     with tab3:
         st.header("Dados detalhados de todos os casos")
         st.dataframe(dados_consolidados2)
