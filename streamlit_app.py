@@ -131,7 +131,7 @@ if uploaded_files:
         dados_consolidados2['data de notificacao'] = dados_consolidados2['data de notificacao'].astype('str')
 
         # Consolidado por vírus por município
-        consolidado_virus = pd.pivot_table(dados_consolidados2, index=['municipio de residencia'], columns = ['Classificação final'], values=['nome'], aggfunc='count').fillna(0)
+        consolidado_virus = pd.pivot_table(dados_consolidados2, index=['municipio de residencia'], columns = ['Classificação final'], aggfunc='size').fillna(0)
 
     # Visualização dos dados
     st.success('Processamento concluído!')
