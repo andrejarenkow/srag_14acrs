@@ -351,29 +351,37 @@ if uploaded_files:
             reset=True
         ).add_to(m)
         
-        popup_html = """
-            <h4>{}</h4>
-            Casos totais: {}<br>
-            <small>Fonte: Seus dados</small>
-        """
+        # Primeiro, crie um dicionário com os totais por município
+        totais_por_municipio = dict(zip(tabela_completa['Município'], tabela_completa['Total_virus']))
         
+        # Modifique o GeoJson para incluir o tooltip com os casos
         folium.GeoJson(
             geojson_data,
-            popup=folium.features.GeoJsonPopup(
-                fields=['NOME'],
-                aliases=[""],
+            name='Labels',
+            style_function=lambda feature: {
+                'fillColor': '#ffff00',
+                'color': 'black',
+                'weight': 0.3,
+                'fillOpacity': 0
+            },
+            tooltip=folium.features.GeoJsonTooltip(
+                fields=['NOME'],  # Campo do GeoJSON com o nome do município
+                aliases=['Município: '],
                 localize=True,
-                labels=False,
-                style="font-weight: bold;",
+                labels=True,
+                style=("""
+                    background-color: #F0EFEF;
+                    border: 1px solid black;
+                    border-radius: 3px;
+                    box-shadow: 3px;
+                    padding: 5px;
+                """),
+                # Adiciona dinamicamente o número de casos
                 formatter="""
                     function(feature) {
                         var nome = feature.properties.NOME;
                         var casos = %s[nome] || 0;
-                        return `<div style="width: 200px">
-                            <h4>${nome}</h4>
-                            Total de casos: <b>${casos}</b><br/>
-                            <small>Clique para mais detalhes</small>
-                        </div>`;
+                        return `Município: ${nome}<br>Casos: ${casos}`;
                     }
                 """ % totais_por_municipio
             )
