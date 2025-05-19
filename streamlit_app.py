@@ -215,7 +215,7 @@ if uploaded_files:
         st.dataframe(obitos)
         
         # Gráfico de barras
-        st.bar_chart(consolidado_virus, stack=False)
+        st.bar_chart(tabela_virus, stack=False)
     
     with tab3:
         st.header("Dados detalhados de todos os casos")
