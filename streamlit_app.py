@@ -5,6 +5,10 @@ import os
 import zipfile
 from io import BytesIO
 import numpy as np
+import folium
+from streamlit_folium import st_folium
+import json
+
 
 # Configuração da página
 st.set_page_config(page_title="Análise de SRAG - CRS 014", layout="wide")
@@ -219,7 +223,7 @@ if uploaded_files:
     st.success('Processamento concluído!')
     
     # Abas para diferentes visualizações
-    tab1, tab2, tab3 = st.tabs(["Pacientes em UTI", "Casos por Município", "Dados Detalhados"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Pacientes em UTI", "Casos por Município", "Dados Detalhados", 'Mapa'])
     
     with tab1:
         st.header("Pacientes com COVID-19 em UTI (sem data de saída)")
