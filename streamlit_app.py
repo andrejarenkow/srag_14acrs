@@ -131,10 +131,62 @@ if uploaded_files:
         dados_consolidados2['data de notificacao'] = dados_consolidados2['data de notificacao'].astype('str')
 
         # Consolidado por vírus por município
-        consolidado_virus = pd.pivot_table(dados_consolidados2, index=['municipio de residencia'], columns = ['Classificação final'], aggfunc='size').fillna(0)
+        # Supondo que df seja seu DataFrame original
+        df = consolidados2.copy()
+
+        # 1. Identificar colunas disponíveis
+        colunas_base = ['municipio de residencia', 'Classificação final', 'Tipo Influenza', 
+                        'subtipo Influenza A', 'subtipo Influenza B', 'VSR', 'ADENO', 'RINO']
+        
+        # Verificar colunas existentes
+        colunas_disponiveis = [col for col in colunas_base if col in df.columns]
+        print(f"Colunas disponíveis: {colunas_disponiveis}")
+        
+        # 2. Criar colunas para cada tipo de vírus
+        # COVID
+        df['COVID'] = df['Classificação final'].apply(lambda x: 1 if x == 'SRAG por Covid-19' else 0)
+        
+        # Influenza A e subtipos
+        df['INFLUENZA_A'] = df['Tipo Influenza'].apply(lambda x: 1 if x == 'Influenza A' else 0)
+        df['INFLUENZA_A_H1N1'] = df['subtipo Influenza A'].apply(lambda x: 1 if x == 'Influenza A (H1N1)' else 0)
+        df['INFLUENZA_A_H3N2'] = df['subtipo Influenza A'].apply(lambda x: 1 if x == 'Influenza A (H3N2)' else 0)
+        
+        # Influenza B e subtipos
+        df['INFLUENZA_B'] = df['Tipo Influenza'].apply(lambda x: 1 if x == 'Influenza B' else 0)
+        df['INFLUENZA_B_VICTORIA'] = df['subtipo Influenza B'].apply(lambda x: 1 if x == 'Victoria' else 0)
+        df['INFLUENZA_B_YAMAGATA'] = df['subtipo Influenza B'].apply(lambda x: 1 if x == 'Yamagatha' else 0)
+        
+        # Outros vírus respiratórios
+        virus_cols = ['VSR', 'ADENO', 'RINO']
+        for col in virus_cols:
+            if col in df.columns:
+                df[col] = df[col].apply(lambda x: 1 if str(x).strip().lower() in ['sim', '1'] else 0)
+        
+        # 3. Criar a tabela consolidada
+        cols_contagem = ['COVID', 'INFLUENZA_A', 'INFLUENZA_A_H1N1', 'INFLUENZA_A_H3N2',
+                        'INFLUENZA_B', 'INFLUENZA_B_VICTORIA', 'INFLUENZA_B_YAMAGATA'] + virus_cols
+        
+        tabela_virus = df.groupby('municipio de residencia')[cols_contagem].sum()
+        
+        # 4. Adicionar totais
+        tabela_virus['TOTAL_INFLUENZA'] = tabela_virus['INFLUENZA_A'] + tabela_virus['INFLUENZA_B']
+        tabela_virus['TOTAL_VIRUS'] = tabela_virus.sum(axis=1)
+        
+        # 5. Reordenar colunas
+        ordem_colunas = ['COVID', 
+                        'INFLUENZA_A', 'INFLUENZA_A_H1N1', 'INFLUENZA_A_H3N2',
+                        'INFLUENZA_B', 'INFLUENZA_B_VICTORIA', 'INFLUENZA_B_YAMAGATA',
+                        'TOTAL_INFLUENZA'] + virus_cols + ['TOTAL_VIRUS']
+        
+        tabela_virus = tabela_virus[ordem_colunas]
+        
+        # 6. Resetar índice e formatar
+        tabela_virus = tabela_virus.reset_index()
+        tabela_virus = tabela_virus.rename(columns={'municipio de residencia': 'Município'})
 
         # Obitos
         obitos = pd.pivot_table(dados_consolidados2[dados_consolidados2['Evolução']=='Óbito'], index=['municipio de residencia'], columns = ['Classificação final'], aggfunc='size').fillna(0)
+
         
 
     # Visualização dos dados
@@ -159,7 +211,7 @@ if uploaded_files:
     
     with tab2:
         st.header("Total de casos por município")
-        st.dataframe(consolidado_virus)
+        st.dataframe(tabela_virus)
         st.dataframe(obitos)
         
         # Gráfico de barras
