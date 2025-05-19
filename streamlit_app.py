@@ -133,6 +133,10 @@ if uploaded_files:
         # Consolidado por vírus por município
         consolidado_virus = pd.pivot_table(dados_consolidados2, index=['municipio de residencia'], columns = ['Classificação final'], aggfunc='size').fillna(0)
 
+        # Obitos
+        obitos = pd.pivot_table(dados_consolidados2[dados_consolidados2['Evolução']=='Óbito'], index=['municipio de residencia'], columns = ['Classificação final'], aggfunc='size').fillna(0)
+        
+
     # Visualização dos dados
     st.success('Processamento concluído!')
     
@@ -156,6 +160,7 @@ if uploaded_files:
     with tab2:
         st.header("Total de casos por município")
         st.dataframe(consolidado_virus)
+        st.dataframe(obitos)
         
         # Gráfico de barras
         st.bar_chart(consolidado_virus, stack=False)
@@ -163,6 +168,7 @@ if uploaded_files:
     with tab3:
         st.header("Dados detalhados de todos os casos")
         st.dataframe(dados_consolidados2)
+        
         
         # Filtros interativos
         st.subheader("Filtrar dados")
