@@ -340,7 +340,7 @@ if uploaded_files:
             geo_data=geojson_data,
             name='Casos de SRAG',
             data=tabela_completa,
-            columns=['Município', 'Total_virus'],
+            columns=['Município', 'TOTAL_VIRUS'],
             key_on='feature.properties.NOME',
             fill_color='YlOrRd',
             fill_opacity=0.7,
