@@ -333,7 +333,7 @@ if uploaded_files:
         tabela_completa['Município'] = tabela_completa['Município'].str.upper().map(mapeamento_nomes).fillna(tabela_completa['Município'])
         
         # Criar o mapa
-        m = folium.Map(location=[-27.5, -54.5], zoom_start=9)  # Ajuste as coordenadas para sua região
+        m = folium.Map(location=[-28, -54.5], zoom_start=9)  # Ajuste as coordenadas para sua região
         
         # Adicionar o choropleth
         folium.Choropleth(
