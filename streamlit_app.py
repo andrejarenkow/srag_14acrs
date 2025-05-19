@@ -4,6 +4,7 @@ import pandas as pd
 import os
 import zipfile
 from io import BytesIO
+import numpy as np
 
 # Configuração da página
 st.set_page_config(page_title="Análise de SRAG - CRS 014", layout="wide")
@@ -211,7 +212,66 @@ if uploaded_files:
     
     with tab2:
         st.header("Total de casos por município")
-        st.dataframe(tabela_virus)
+        
+        # Função para aplicar cores
+        def color_cells(val):
+            if val == 0:
+                color = '#F5F5F5'  # Cinza claro
+            elif 1 <= val <= 3:
+                color = '#FFF3CD'  # Amarelo claro (alerta)
+            elif 4 <= val <= 6:
+                color = '#FFE082'  # Amarelo médio
+            elif 7 <= val <= 9:
+                color = '#FFA000'  # Amarelo escuro
+            else:
+                color = '#D32F2F'  # Vermelho (crítico)
+            return f'background-color: {color}; color: black;'
+        
+        # Título
+        st.title('Distribuição de Vírus por Município')
+        st.markdown("""
+        <style>
+            .stDataFrame div[data-testid="stDataFrameContainer"] {
+                width: 100% !important;
+            }
+        </style>
+        """, unsafe_allow_html=True)
+        
+        # Aplicar estilo
+        styled_df = (
+            tabela_virus.style
+            .applymap(color_cells, subset=pd.IndexSlice[:, tabela_virus.columns[1:]])
+            .format("{:.0f}", na_rep="-")
+            .set_properties(**{'text-align': 'center'})
+            .set_table_styles([
+                {'selector': 'th', 'props': [('background-color', '#2c3e50'), ('color', 'white')]},
+                {'selector': 'td:hover', 'props': [('background-color', '#bdc3c7')]}
+            ])
+        )
+        
+        # Mostrar tabela
+        st.dataframe(styled_df, use_container_width=True)
+        
+        # Legenda de cores
+        st.markdown("""
+        **Legenda:**
+        - <span style='background-color:#F5F5F5; padding: 2px 5px; border-radius: 3px;'>0 casos</span>
+        - <span style='background-color:#FFF3CD; padding: 2px 5px; border-radius: 3px;'>1-3 casos</span>
+        - <span style='background-color:#FFE082; padding: 2px 5px; border-radius: 3px;'>4-6 casos</span>
+        - <span style='background-color:#FFA000; padding: 2px 5px; border-radius: 3px;'>7-9 casos</span>
+        - <span style='background-color:#D32F2F; color:white; padding: 2px 5px; border-radius: 3px;'>10+ casos</span>
+        """, unsafe_allow_html=True)
+        
+        # Adicionar filtros
+        with st.expander("Filtros Avançados"):
+            min_cases = st.slider('Casos mínimos para destacar', 0, 10, 3)
+            selected_viruses = st.multiselect(
+                'Selecione os vírus para visualizar',
+                options=tabela_virus.columns[1:],
+                default=tabela_virus.columns[1:].tolist()
+            )
+        
+
         st.header("Total de óbitos por município")
         st.dataframe(obitos)
         
