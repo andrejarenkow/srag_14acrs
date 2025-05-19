@@ -17,7 +17,7 @@ Carregue arquivos ZIP contendo DBFs para iniciar a análise.
 """)
 
 # Upload de arquivos
-uploaded_files = st.file_uploader("Carregue arquivos ZIP com dados DBF", type="zip", accept_multiple_files=True)
+uploaded_files = st.sidebar.file_uploader("Carregue arquivos ZIP com dados DBF", type="zip", accept_multiple_files=True)
 
 if uploaded_files:
     # Processamento dos arquivos
