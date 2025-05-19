@@ -158,7 +158,7 @@ if uploaded_files:
         st.dataframe(consolidado_virus)
         
         # Gráfico de barras
-        st.bar_chart(consolidado_virus.set_index('municipio de residencia'))
+        st.bar_chart(consolidado_virus)
     
     with tab3:
         st.header("Dados detalhados de todos os casos")
