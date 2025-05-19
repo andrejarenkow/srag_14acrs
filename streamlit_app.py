@@ -362,8 +362,8 @@ if uploaded_files:
                 'fillOpacity': 0
             },
             tooltip=folium.features.GeoJsonTooltip(
-                fields=['NOME', 'TOTAL_VIRUS'],
-                aliases=['Município: ', 'Total Vírus'],
+                fields=['NOME'],
+                aliases=['Município: '],
                 localize=True
             )
         ).add_to(m)
@@ -376,19 +376,22 @@ if uploaded_files:
         st.markdown('Mapa de calor dos casos totais por município')
         
         # Ajustar o tamanho do mapa
-        st_folium(m, width=725, height=500)
+        coluna_mapa, coluna_legenda = st.columns(2)
+        with coluna_mapa:
+            st_folium(m, width=725, height=500)
         
         # Adicionar legenda explicativa
-        st.markdown("""
-        **Legenda do Mapa:**
-        - <span style='color:#ffffcc;'>▉</span> 0 casos
-        - <span style='color:#ffeda0;'>▉</span> 1-5 casos
-        - <span style='color:#fed976;'>▉</span> 6-10 casos
-        - <span style='color:#feb24c;'>▉</span> 11-20 casos
-        - <span style='color:#fd8d3c;'>▉</span> 21-50 casos
-        - <span style='color:#fc4e2a;'>▉</span> 51-100 casos
-        - <span style='color:#b10026;'>▉</span> 100+ casos
-        """, unsafe_allow_html=True)
+        with coluna_legenda:
+            st.markdown("""
+            **Legenda do Mapa:**
+            - <span style='color:#ffffcc;'>▉</span> 0 casos
+            - <span style='color:#ffeda0;'>▉</span> 1-5 casos
+            - <span style='color:#fed976;'>▉</span> 6-10 casos
+            - <span style='color:#feb24c;'>▉</span> 11-20 casos
+            - <span style='color:#fd8d3c;'>▉</span> 21-50 casos
+            - <span style='color:#fc4e2a;'>▉</span> 51-100 casos
+            - <span style='color:#b10026;'>▉</span> 100+ casos
+            """, unsafe_allow_html=True)
     
     with tab3:
         st.header("Dados detalhados de todos os casos")
