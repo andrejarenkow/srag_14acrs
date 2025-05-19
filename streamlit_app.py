@@ -58,6 +58,7 @@ if uploaded_files:
         dados_consolidados = dados_geral[(dados_geral['CLASSI_FIN']=='5')&(dados_geral['ID_RG_RESI']=='014 CRS')]
         consolidado = pd.DataFrame(dados_consolidados.groupby(by='ID_MN_RESI')['ID_RG_RESI'].count()).reset_index()
         consolidado.columns = ['municipio de residencia', 'total']
+
         
         dados_consolidados3 = dados_geral[(dados_geral['ID_RG_RESI']=='014 CRS')]
         dados_consolidados2 = dados_consolidados3.filter(['NM_PACIENT', 'ID_MN_RESI',"DT_NOTIFIC", 'DT_SIN_PRI', 'CRITERIO',
@@ -129,6 +130,9 @@ if uploaded_files:
         dados_consolidados2 = dados_consolidados2.sort_values(by='data de notificacao')
         dados_consolidados2['data de notificacao'] = dados_consolidados2['data de notificacao'].astype('str')
 
+        # Consolidado por vírus por município
+        consolidado_virus = pd.pivot_table(dados_consolidados2, index=['municipio de residencia'], columns = ['Classificação final'], values=['nome'], aggfunc='count').fillna(0)
+
     # Visualização dos dados
     st.success('Processamento concluído!')
     
@@ -150,8 +154,8 @@ if uploaded_files:
         )
     
     with tab2:
-        st.header("Total de casos de COVID-19 por município")
-        st.dataframe(consolidado)
+        st.header("Total de casos por município")
+        st.dataframe(consolidado_virus)
         
         # Gráfico de barras
         st.bar_chart(consolidado.set_index('municipio de residencia'))
