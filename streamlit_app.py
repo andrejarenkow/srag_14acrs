@@ -171,16 +171,16 @@ if uploaded_files:
             
             classificacao = st.selectbox(
                 'Classificação Final',
-                options=['Todos'] + sorted(dados_consolidados2['Classificação final'].unique().tolist())
+                options=['Todos'] + sorted(dados_consolidados2['Classificação final'].unique().tolist()))
         
         with col2:
             evolucao = st.selectbox(
                 'Evolução',
-                options=['Todos'] + sorted(dados_consolidados2['Evolução'].unique().tolist())
+                options=['Todos'] + sorted(dados_consolidados2['Evolução'].unique().tolist()))
             
             uti = st.selectbox(
                 'UTI',
-                options=['Todos'] + sorted(dados_consolidados2['Foi para UTI?'].unique().tolist())
+                options=['Todos'] + sorted(dados_consolidados2['Foi para UTI?'].unique().tolist()))
         
         # Aplicar filtros
         filtered_data = dados_consolidados2.copy()
