@@ -333,7 +333,8 @@ if uploaded_files:
         tabela_completa['Município'] = tabela_completa['Município'].str.upper().map(mapeamento_nomes).fillna(tabela_completa['Município'])
         
         # 2. Criar dicionário de casos por município
-        totais_por_municipio = dict(zip(tabela_completa['Município'], tabela_completa['TOTAL_VIRUS']))
+        selecao_virus = st.selectbox('Selecione o vírus', options = ['COVID', 'INFLUENZA_A', 'INFLUENZA_A_H1N1', 'INFLUENZA_A_H3N2', 'INFLUENZA_B', 'INFLUENZA_B_VICTORIA', 'INFLUENZA_B_YAMAGATA','TOTAL_VIRUS'])
+        totais_por_municipio = dict(zip(tabela_completa['Município'], tabela_completa[selecao_virus]))
         
         # 3. Adicionar os dados ao GeoJSON
         for feature in geojson_data['features']:
