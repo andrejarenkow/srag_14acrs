@@ -177,7 +177,10 @@ if uploaded_files:
         
         # 4. Adicionar totais
         #tabela_virus['TOTAL_INFLUENZA'] = tabela_virus['INFLUENZA_A'] + tabela_virus['INFLUENZA_B']
-        tabela_virus['TOTAL_VIRUS'] = tabela_virus.sum(axis=1)
+        tabela_virus['TOTAL_VIRUS'] = tabela_virus[['COVID', 
+                        'INFLUENZA_A', 
+                        'INFLUENZA_B',
+                        ] + virus_cols].sum(axis=1)
         
         # 5. Reordenar colunas
         ordem_colunas = ['COVID', 
