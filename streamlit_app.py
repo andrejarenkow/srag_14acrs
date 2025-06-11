@@ -68,7 +68,7 @@ if uploaded_files:
 
         
         dados_consolidados3 = dados_geral[(dados_geral['ID_RG_RESI']=='014 CRS')]
-        dados_consolidados2 = dados_consolidados3.filter(['NM_PACIENT', 'ID_MN_RESI',"DT_NOTIFIC", 'DT_SIN_PRI', 'CRITERIO',
+        dados_consolidados2 = dados_consolidados3.filter(['NM_PACIENT', 'ID_MN_RESI','ID_MUNICIP',"DT_NOTIFIC", 'DT_SIN_PRI', 'CRITERIO',
                                                          'UTI', 'DT_SAIDUTI', 'CLASSI_FIN', 'EVOLUCAO', 'DT_EVOLUCAO' , 'PCR_RESUL' , 'TP_FLU_PCR' , 'PCR_FLUASU' , 'PCR_FLUBLI' , 'PCR_VSR', 'PCR_PARA1' , 'PCR_PARA2' ,
                                                           'PCR_PARA3' , 'PCR_PARA4' , 'PCR_ADENO' , 'PCR_RINO'])
 
@@ -121,13 +121,13 @@ if uploaded_files:
         for i in lista_virusresp:
             dados_consolidados2[i] = dados_consolidados2[i].replace({'1': 'sim' , ' ' : ' '})
 
-        dados_consolidados2 = dados_consolidados2[['NM_PACIENT', 'ID_MN_RESI', 'DT_NOTIFIC', 'DT_SIN_PRI', 'UTI_texto',
+        dados_consolidados2 = dados_consolidados2[['NM_PACIENT', 'ID_MN_RESI','ID_MUNICIP', 'DT_NOTIFIC', 'DT_SIN_PRI', 'UTI_texto',
                                                    'DT_SAIDUTI', 'criterio_texto',  'Classificação final', 'Evolução' ,
                                                    'PCR_RESUL' , 'TP_FLU_PCR' , 'PCR_FLUASU' , 'PCR_FLUBLI' , 'PCR_VSR' ,
                                                    'PCR_PARA1' , 'PCR_PARA2' , 'PCR_PARA3' , 'PCR_PARA4' , 'PCR_ADENO' ,
                                                    'PCR_RINO']]
 
-        dados_consolidados2.columns = ['nome', 'municipio de residencia', 'data de notificacao', 'inicio dos sintomas',
+        dados_consolidados2.columns = ['nome', 'municipio de residencia','municipo de notificacao', 'data de notificacao', 'inicio dos sintomas',
                                        'Foi para UTI?', 'Data de saída da UTI', 'Critério de confirmação',
                                        'Classificação final', 'Evolução' , 'Resultado outro PCR' ,
                                        'Tipo Influenza' ,'subtipo Influenza A' , 'subtipo Influenza B' , 'VSR' ,
